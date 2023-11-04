@@ -1,3 +1,6 @@
+#TODO visualization of the different operations , (truth tables, line graphs (for unary), and heat maps(for binary))
+
+
 # Nullary operations
 
 def logical_true(a):
@@ -107,7 +110,11 @@ def test_logical_negation():
     for case in test_cases:
         result = logical_negation(case)
         print(f"Input: {case}, Output: {result}")
-        
+    
+    for value in range(0, 105, 5):
+        a = value / 100.0  # Convert the integer value to a decimal value between 0 and 1
+        result = logical_negation(a)
+        print(f"logical_negation({a}) = {result}")
         
 #Binary operations
 
