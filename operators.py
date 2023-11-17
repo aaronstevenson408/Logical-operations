@@ -107,7 +107,7 @@ class FunctionVisualizer:
             print(table)
             print("\n")
 
-    def visualize(self, increment_scale=0.01, save_image=True, image_name="composite_image.png"):
+    def visualize(self, increment_scale=0.001, save_image=True, image_name="composite_image.png"):
         images = []
 
         for function in self.functions:
@@ -317,7 +317,7 @@ class Operands:
             if isinstance(a, bool) and isinstance(b, bool):
                 return not (a or b)
             elif isinstance(a, (int, float)) and isinstance(b, (int, float)):
-                return 1.0 - a - b
+                return (1.0 - a) * (1.0 - b)
             else:
                 return None  # or raise an error if needed
         def converse_nonimplication(a, b):
@@ -460,7 +460,8 @@ class Operands:
             if isinstance(a, bool) and isinstance(b, bool):
                 return a == b
             elif isinstance(a, (int, float)) and isinstance(b, (int, float)):
-                return 1 - abs(a - b)
+                # return 1 - abs(a - b)
+                return a * b + (1 - a) * (1 - b)
             else:
                 return None  # or raise an error if needed
         def binary_projection_b(a, b):
@@ -620,7 +621,7 @@ class Operands:
                 None
         def expression1(a, b):
             """
-            a + (b - 1).
+             (a * b) / (a + b).
 
             Args:
                 p (bool or float): First input value, can be either a Boolean (True/False) or a decimal (0.0-1.0).
@@ -630,26 +631,9 @@ class Operands:
                 bool or float: Always returns Null
             """
             if isinstance(a, bool) and isinstance(b, bool):
-                return a + (b - 1)
+                return  (a - 1) / (b + 1) + 1
             elif isinstance(a, (int, float)) and isinstance(b, (int, float)):
-                return a + (b - 1)
-            else:
-                None
-        def templateBinaryFunction(a, b):
-            """
-            Does Nothing.
-
-            Args:
-                p (bool or float): First input value, can be either a Boolean (True/False) or a decimal (0.0-1.0).
-                q (bool or float): Second input value, can be either a Boolean (True/False) or a decimal (0.0-1.0).
-
-            Returns:
-                bool or float: Always returns Null
-            """
-            if isinstance(a, bool) and isinstance(b, bool):
-                return None
-            elif isinstance(a, (int, float)) and isinstance(b, (int, float)):
-                return None
+                return  (a * b) + ((1 - a) * (1 - b))
             else:
                 None
         
@@ -677,14 +661,59 @@ class Operands:
 # visualizer = FunctionVisualizer(operands_list)
 # visualizer.truth_table("boolean")
 # visualizer.visualize()
+# 8,4,2,1
 operands_list = [
     
-    Operands.BinaryOps.converse_nonimplication,
-    Operands.BinaryOps.material_nonimplication,
     Operands.BinaryOps.logical_conjunction,
-    Operands.TestBinaryOp.expression1
+    Operands.BinaryOps.material_nonimplication,
+    Operands.BinaryOps.converse_nonimplication,
+    Operands.BinaryOps.logical_nor
     
 ]
 visualizer = FunctionVisualizer(operands_list)
-visualizer.truth_table(input_choices="inc0.5")
-visualizer.visualize()
+visualizer.truth_table(input_choices="boolean")
+visualizer.visualize(image_name="FromZero.png")
+
+# 7,11,13,14
+operands_list = [
+    
+    Operands.BinaryOps.logical_nand,
+    Operands.BinaryOps.material_implication,
+    Operands.BinaryOps.converse_implication,
+    Operands.BinaryOps.logical_disjunction
+    
+]
+visualizer = FunctionVisualizer(operands_list)
+visualizer.truth_table(input_choices="boolean")
+visualizer.visualize(image_name="FromOne.png")
+# 6,9
+operands_list = [
+    
+    Operands.BinaryOps.logical_xor,
+    Operands.BinaryOps.logical_equality,
+    
+]
+visualizer = FunctionVisualizer(operands_list)
+visualizer.truth_table(input_choices="boolean")
+visualizer.visualize(image_name="insideOutside.png")
+
+# the inbetweens  - 10,3,5,12
+operands_list = [
+    
+    Operands.BinaryOps.binary_projection_b,
+    Operands.BinaryOps.binary_negation_a,
+    Operands.BinaryOps.binary_negation_b,
+    Operands.BinaryOps.binary_projection_a
+]
+visualizer = FunctionVisualizer(operands_list)
+visualizer.truth_table(input_choices="boolean")
+visualizer.visualize(image_name="inBetweens.png")
+
+operands_list = [
+    
+    Operands.BinaryOps.logical_tautology,
+    Operands.BinaryOps.logical_contradiction
+]
+visualizer = FunctionVisualizer(operands_list)
+visualizer.truth_table(input_choices="boolean")
+visualizer.visualize(image_name="TrueFalse.png")
